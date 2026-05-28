@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Commodity Tracker — Plenitude — Mockup</title>
+<style>
+:root {
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --color-background-primary: #ffffff;
+  --color-background-secondary: #f5f5f3;
+  --color-text-primary: #1a1a1a;
+  --color-text-secondary: #6b6b6b;
+  --color-text-tertiary: #999;
+  --color-border-tertiary: rgba(0,0,0,0.12);
+  --color-border-secondary: rgba(0,0,0,0.25);
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background-primary: #1a1a1a;
+    --color-background-secondary: #2a2a2a;
+    --color-text-primary: #e8e8e8;
+    --color-text-secondary: #aaa;
+    --color-text-tertiary: #777;
+    --color-border-tertiary: rgba(255,255,255,0.12);
+    --color-border-secondary: rgba(255,255,255,0.25);
+  }
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);color:var(--color-text-primary);background:var(--color-background-primary);padding:24px;max-width:960px;margin:0 auto}
+.d{padding:1rem 0}
+.hdr{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.pill{background:#00875A;color:#fff;font-weight:500;font-size:13px;padding:4px 12px;border-radius:var(--border-radius-md)}
+.t1{font-size:18px;font-weight:500}.t2{font-size:12px;color:var(--color-text-secondary)}
+.tabs{display:flex;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:20px}
+.tb{font-size:13px;padding:8px 16px;color:var(--color-text-secondary);cursor:pointer;border-bottom:2px solid transparent;user-select:none}
+.tb:hover{color:var(--color-text-primary)}.tb.on{color:#00875A;border-bottom-color:#00875A;font-weight:500}
+.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-bottom:24px}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:16px;cursor:pointer;transition:border-color 0.15s}
+.card:hover{border-color:var(--color-border-secondary)}.card.sel{border:2px solid #00875A}
+.card-name{font-size:13px;font-weight:500;margin-bottom:10px}
+.card-cost{font-size:26px;font-weight:500}.card-cost small{font-size:13px;font-weight:400;color:var(--color-text-secondary)}
+.card-delta{font-size:13px;margin-top:4px}
+.up{color:#A32D2D}.dn{color:#0F6E56}.flat{color:var(--color-text-secondary)}
+.card-bar{margin-top:12px;display:flex;height:6px;border-radius:3px;overflow:hidden}.card-bar div{height:100%}
+.card-legend{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.card-legend span{font-size:10px;color:var(--color-text-secondary);display:flex;align-items:center;gap:3px}
+.card-legend i{width:6px;height:6px;border-radius:1px;display:inline-block}
+.stitle{font-size:15px;font-weight:500;margin-bottom:12px;margin-top:8px}
+.chwrap{position:relative;width:100%;height:260px;margin-bottom:24px}
+.lgd{display:flex;flex-wrap:wrap;gap:14px;font-size:11px;color:var(--color-text-secondary);margin-bottom:10px}
+.lgd i{width:8px;height:8px;border-radius:2px;display:inline-block;margin-right:4px;vertical-align:middle}
+.detail{margin-bottom:20px}
+.dtitle{font-size:14px;font-weight:500;margin-bottom:10px;padding-bottom:6px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.crow{display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:12px}
+.cname{width:120px;min-width:120px;color:var(--color-text-secondary);text-align:right}
+.cbarw{flex:1;display:flex;align-items:center;gap:6px}
+.cbar{height:20px;border-radius:3px;display:flex;align-items:center;padding-left:6px;font-size:10px;font-weight:500;color:#fff;min-width:2px;transition:width 0.4s}
+.cvals{width:160px;min-width:160px;display:flex;gap:10px;font-size:11px}
+.cvals .cv{color:var(--color-text-secondary)}.cvals .cd{font-weight:500}
+.agg-box{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:14px 16px;margin-top:16px;margin-bottom:24px}
+.agg-title{font-size:12px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:8px}
+.agg-row{display:flex;flex-wrap:wrap;gap:20px;align-items:baseline}
+.agg-big{font-size:22px;font-weight:500}.agg-sub{font-size:11px;color:var(--color-text-secondary)}
+.divider{border:none;border-top:0.5px solid var(--color-border-tertiary);margin:28px 0 24px}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:20px}
+.kpi{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 12px;cursor:pointer;transition:outline 0.15s;outline:2px solid transparent}
+.kpi.hl{outline:2px solid #00875A}
+.kpi-label{font-size:10px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:0.3px;margin-bottom:3px}
+.kpi-val{font-size:18px;font-weight:500}.kpi-val small{font-size:11px;font-weight:400}
+.kpi-d{font-size:11px;margin-top:2px}
+.driver-box{margin-top:10px;padding:10px 14px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);font-size:12px;color:var(--color-text-secondary)}
+.driver-box strong{color:var(--color-text-primary)}
+.fn{font-size:11px;color:var(--color-text-tertiary);margin-top:16px;border-top:0.5px solid var(--color-border-tertiary);padding-top:10px}
+.ph{padding:40px 20px;text-align:center;color:var(--color-text-secondary);font-size:14px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);margin:20px 0}
+.transp-sep{border:none;border-top:1px dashed var(--color-border-tertiary);margin:12px 0 8px}
+.transp-label{font-size:10px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:0.3px;margin-bottom:8px}
+.kpi-tag{font-size:9px;color:var(--color-text-tertiary);background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:4px;padding:1px 5px;margin-left:4px;vertical-align:middle}
+.transp-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:12px}
+.transp-name{width:120px;min-width:120px;color:var(--color-text-secondary);text-align:right}
+.transp-price{font-size:12px;font-weight:500;flex:1}
+.transp-vals{width:160px;min-width:160px;display:flex;gap:10px;font-size:11px}
+.po-fltr{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.po-chip{font-size:12px;padding:4px 12px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);cursor:pointer;display:flex;align-items:center;gap:6px;user-select:none;transition:all 0.15s}
+.po-chip i{width:8px;height:8px;border-radius:2px;display:inline-block}
+.po-chip.off{opacity:0.35}.po-chip:hover{border-color:var(--color-border-secondary)}
+.po-table{font-size:12px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);overflow:hidden}
+.po-th,.po-tr{display:grid;grid-template-columns:90px 1fr 80px 110px 100px;gap:8px;padding:8px 12px;align-items:center}
+.po-th{background:var(--color-background-secondary);font-size:10px;text-transform:uppercase;letter-spacing:0.3px;color:var(--color-text-secondary);font-weight:500}
+.po-tr{border-top:0.5px solid var(--color-border-tertiary)}
+.po-tr:hover{background:var(--color-background-secondary)}
+.po-loc{color:var(--color-text-secondary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.po-pr{font-weight:500;text-align:right}.po-val{text-align:right;color:var(--color-text-secondary)}
+.po-fut{font-size:9px;color:#BA7517;margin-left:4px}
+@media(max-width:640px){.po-th,.po-tr{grid-template-columns:70px 1fr 64px;font-size:11px}.po-th span:nth-child(3),.po-tr span:nth-child(3),.po-th span:nth-child(4),.po-tr span:nth-child(4){display:none}}
+</style>
+</head>
+<body>
+<div class="d">
+<div class="hdr"><span class="pill">Plenitude</span><div><div class="t1">Commodity tracker — Fotovoltaico</div><div class="t2">Ultimo aggiornamento: aprile 2026 · Settimanale</div></div></div>
+
+<div class="tabs" id="tabs"><div class="tb on" data-t="fv">Fotovoltaico</div><div class="tb" data-t="eol">Eolico</div><div class="tb" data-t="bat">Batterie</div></div>
+
+<div id="fv">
+
+<div class="stitle">Impatto sui componenti</div>
+<div class="summary" id="cards"></div>
+<div id="detailPanel"></div>
+
+<div class="stitle">Storico costo materiali stimato (€/MW) — fino ad oggi</div>
+<div class="lgd" id="lgd1"></div>
+<div class="chwrap"><canvas id="ch1" role="img" aria-label="Storico costo stimato per componente FV">Storico costo moduli, tracker, inverter.</canvas></div>
+
+<div class="agg-box">
+<div class="agg-title">Impianto FV completo — costo materiali stimato ad oggi</div>
+<div class="agg-row">
+<div><div class="agg-big">€240.500<small style="font-size:13px;font-weight:400">/MW</small></div><div class="agg-sub">Moduli €167k + Tracker €43.5k + Inverter €30k</div></div>
+<div><div class="agg-big up" style="font-size:18px">+1.4%</div><div class="agg-sub">vs. 30 giorni fa</div></div>
+<div><div class="agg-big dn" style="font-size:18px">-3.2%</div><div class="agg-sub">YTD</div></div>
+</div></div>
+
+<hr class="divider">
+
+<div class="sec-head"><div class="stitle" style="margin:0">Acquisti moduli — dati interni Plenitude <span class="kpi-tag" style="background:#A32D2D;color:#fff;border:none">dato reale riservato</span></div><div class="t2">27 ordini · mag 2023 → lug 2026 · clicca un fornitore per filtrare</div></div>
+
+<div class="kpi-grid" id="poKpi"></div>
+
+<div class="dtitle" style="margin-top:8px">Andamento prezzo per fornitore <small style="font-weight:400;color:var(--color-text-tertiary)">€/MW</small></div>
+<div class="po-fltr" id="poFltr"></div>
+<div class="chwrap" style="height:300px"><canvas id="chPo" role="img" aria-label="Prezzo acquisto moduli per fornitore nel tempo">Andamento prezzo €/W per fornitore.</canvas></div>
+
+<div class="agg-title" style="margin-top:8px;margin-bottom:10px">Acquisti Plenitude vs benchmark mercato</div>
+<div class="kpi-grid">
+<div class="kpi" style="cursor:default;outline:2px solid #00875A33"><div class="kpi-label">Prezzo medio ponderato</div><div class="kpi-val">€157k<small>/MW</small></div><div class="kpi-d" style="color:var(--color-text-secondary)">0,157 €/W</div></div>
+<div class="kpi" style="cursor:default"><div class="kpi-label">Ultimo acquisto · mar 2026</div><div class="kpi-val dn">€100k<small>/MW</small></div><div class="kpi-d" style="color:var(--color-text-secondary)">0,100 €/W</div></div>
+<div class="kpi" style="cursor:default"><div class="kpi-label">Benchmark modulo <span class="kpi-tag">illustrativo</span></div><div class="kpi-val" style="color:var(--color-text-secondary)">€167k<small>/MW</small></div><div class="kpi-d" style="color:var(--color-text-secondary)">0,167 €/W</div></div>
+<div class="kpi" style="cursor:default"><div class="kpi-label">Scostamento vs benchmark</div><div class="kpi-val dn">−40%</div><div class="kpi-d" style="color:var(--color-text-secondary)">acquisti recenti</div></div>
+</div>
+<div class="driver-box" style="margin-top:12px">Conversione: 1 €/W = 1.000.000 €/MW. Nota: il benchmark è un <em>costo materiali stimato</em> del modulo, gli acquisti sono <em>prezzo del modulo finito</em> — metriche diverse, confronto direzionale.</div>
+
+<div class="dtitle" style="margin-top:8px">Pagato vs stimato — periodo apr 2025 → apr 2026</div>
+<div class="lgd" style="margin-bottom:6px">
+<span><i style="background:#00875A"></i>Prezzo acquisto Plenitude</span>
+<span><i style="background:#185FA5"></i>Costo materiali stimato (moduli)</span>
+</div>
+<div class="lgd" style="margin-bottom:6px"><span style="font-size:11px;color:var(--color-text-tertiary)">Asse €/MW · 1 €/W = 1.000.000 €/MW · costo stimato moduli illustrativo</span></div>
+<div class="chwrap" style="height:280px"><canvas id="chCmp" role="img" aria-label="Confronto prezzo acquisto vs costo stimato moduli 2025">Confronto pagato vs stimato 2025.</canvas></div>
+
+<div class="dtitle po-toggle" id="poToggle" style="margin-top:8px;cursor:pointer;display:flex;align-items:center;gap:8px;user-select:none"><span id="poArrow" style="display:inline-block;transition:transform 0.2s;font-size:11px">▶</span>Dettaglio ordini <span id="poCount" style="font-weight:400;color:var(--color-text-tertiary);font-size:12px"></span></div>
+<div class="po-table" id="poTable" style="display:none"></div>
+
+<hr class="divider">
+
+<div class="sec-head"><div class="stitle" style="margin:0">Mercato materie prime</div><div class="t2">Prezzi spot ad oggi — clicca per evidenziare</div></div>
+
+<div class="kpi-grid" id="kpiGrid"></div>
+
+<div class="lgd" id="lgd2"></div>
+<div class="chwrap" style="height:280px"><canvas id="ch2" role="img" aria-label="Storico prezzi materie prime">Storico prezzi commodity.</canvas></div>
+
+</div>
+
+<div id="other" style="display:none"><div class="ph" id="phMsg"></div></div>
+
+<div class="fn">Dati illustrativi (mockup). Vista componenti: costi €/MW pesati per % incidenza materiali. Vista commodity: prezzi normalizzati base 100. Proxy polimeri = petrolio (Brent). Proxy vetro solare = media pesata soda ash + gas naturale. Il petrolio (Brent) è incluso come indicatore direzionale del costo di trasporto. Prezzi reali via API in Fase 2.</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+Chart.defaults.devicePixelRatio=Math.max(window.devicePixelRatio||1,2);
+const isDk=matchMedia('(prefers-color-scheme:dark)').matches;
+const gc=isDk?'rgba(255,255,255,0.08)':'rgba(0,0,0,0.06)';
+const tc=isDk?'rgba(255,255,255,0.5)':'rgba(0,0,0,0.45)';
+
+const mc={Silicio:'#00875A',Argento:'#185FA5',Alluminio:'#BA7517',Rame:'#D85A30',Acciaio:'#888780',Vetro:'#5DCAA5',Polimeri:'#7F77DD',Plastica:'#AFA9EC',Petrolio:'#501313'};
+const compC={moduli:'#00875A',tracker:'#185FA5',inverter:'#BA7517'};
+
+const comps={
+  moduli:{name:'Moduli FV',cost:167000,mats:[
+    {n:'Silicio',cost:70000,pct:55,d30:3.2},{n:'Polimeri',cost:26000,pct:20,d30:4.2},
+    {n:'Argento',cost:25000,pct:19,d30:5.1},{n:'Alluminio',cost:17000,pct:17,d30:-1.8},
+    {n:'Rame',cost:25000,pct:5,d30:2.4},{n:'Vetro',cost:4000,pct:4,d30:1.8}]},
+  tracker:{name:'Tracker',cost:43500,mats:[
+    {n:'Acciaio',cost:27000,pct:60,d30:-0.5},{n:'Alluminio',cost:16500,pct:40,d30:-1.8}]},
+  inverter:{name:'Inverter',cost:30000,mats:[
+    {n:'Rame',cost:18000,pct:60,d30:2.4},{n:'Alluminio',cost:6000,pct:20,d30:-1.8},
+    {n:'Acciaio',cost:3000,pct:10,d30:-0.5},{n:'Plastica',cost:3000,pct:10,d30:-0.3}]}
+};
+
+const petrolioHist=[100,97.8,95.5,93.2,91.8,94.5,97.2,99.8,96.5,98.2,100.5,103.1,106.8];
+const sodaAshHist=[100,100.8,101.5,102.3,103.1,103.8,104.2,105.0,105.5,106.1,106.8,107.2,108.0];
+const gasNatHist=[100,99.2,97.5,96.8,98.5,101.2,103.5,106.2,108.5,105.8,103.2,104.5,106.0];
+const vetroProxy=sodaAshHist.map((v,i)=>Math.round((v*0.5+gasNatHist[i]*0.5)*10)/10);
+const polimeriProxy=petrolioHist.map(v=>v);
+
+const commodities=[
+  {id:'silicio',n:'Silicio policrist.',price:'$62.4',unit:'/kg',d30:3.2,d7:0.8},
+  {id:'argento',n:'Argento',price:'$31.8',unit:'/oz',d30:5.1,d7:1.2},
+  {id:'alluminio',n:'Alluminio',price:'$2,485',unit:'/t',d30:-1.8,d7:-0.4},
+  {id:'rame',n:'Rame',price:'$9,320',unit:'/t',d30:2.4,d7:0.6},
+  {id:'acciaio',n:'Acciaio HRC',price:'$580',unit:'/t',d30:-0.5,d7:-0.1},
+  {id:'_sep1'},
+  {id:'vetro',n:'Vetro solare',price:'Proxy',unit:'',d30:1.8,d7:0.5,tag:'soda ash + gas nat.'},
+  {id:'polimeri',n:'Polimeri (EVA)',price:'Proxy',unit:'',d30:4.2,d7:1.1,tag:'petrolio'},
+  {id:'_sep2'},
+  {id:'petrolio',n:'Petrolio (Brent)',price:'$78.5',unit:'/bbl',d30:4.2,d7:1.1,tag:'trasporto'}
+];
+
+const ms=['Apr 25','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic','Gen 26','Feb','Mar','Apr 26 ●'];
+
+const compHist={
+  moduli:[158000,156500,159000,161000,160200,158800,161500,163000,162000,164500,165800,164200,167000],
+  tracker:[45200,44800,44500,44900,45100,44600,44200,43800,44000,43900,43600,43800,43500],
+  inverter:[28500,28800,29200,29000,28700,29100,29500,29800,29400,29700,30200,29900,30000]
+};
+
+const commHist={
+  silicio:[100,98.5,96.2,94.8,92.1,89.5,87.3,85.1,83.6,86.2,89.4,92.7,96.1],
+  argento:[100,101.2,103.5,106.1,104.8,107.3,109.5,108.2,110.8,112.4,111.6,114.2,117.8],
+  alluminio:[100,101.5,103.2,102.8,101.4,100.2,99.1,97.8,96.5,95.8,96.2,95.4,94.7],
+  rame:[100,101.8,103.4,102.1,100.5,101.8,103.2,104.5,103.8,105.2,106.1,104.8,106.5],
+  acciaio:[100,99.8,99.2,98.5,98.1,97.6,97.8,97.2,96.8,97.1,96.5,97.3,97.0],
+  vetro:vetroProxy,
+  polimeri:polimeriProxy,
+  petrolio:petrolioHist
+};
+
+function wd(c){let w=0;c.mats.forEach(m=>{w+=m.d30*m.pct/100});return Math.round(w*10)/10}
+function ctb(m){return Math.round(m.d30*m.pct/100*10)/10}
+
+const cardsEl=document.getElementById('cards');
+let selected=null;
+
+Object.entries(comps).forEach(([k,c])=>{
+  const w=wd(c);const cls=w>0.2?'up':w<-0.2?'dn':'flat';const s=w>0?'+':'';
+  const cd=document.createElement('div');cd.className='card';cd.dataset.comp=k;
+  const bp=c.mats.map(m=>`<div style="width:${m.pct}%;background:${mc[m.n]}"></div>`).join('');
+  const lp=c.mats.slice(0,4).map(m=>`<span><i style="background:${mc[m.n]}"></i>${m.n} ${m.pct}%</span>`).join('');
+  cd.innerHTML=`<div class="card-name">${c.name}</div><div class="card-cost">€${(c.cost/1000).toFixed(0)}k<small>/MW</small></div><div class="card-delta ${cls}">${s}${w}% <span style="font-size:11px;color:var(--color-text-secondary)">30gg</span></div><div class="card-bar">${bp}</div><div class="card-legend">${lp}</div>`;
+  cd.addEventListener('click',()=>toggleDetail(k));
+  cardsEl.appendChild(cd);
+});
+
+const dp=document.getElementById('detailPanel');
+function toggleDetail(k){if(selected===k){selected=null}else{selected=k}renderDetail();updCards()}
+function updCards(){document.querySelectorAll('.card').forEach(c=>c.classList.toggle('sel',c.dataset.comp===selected))}
+
+function renderDetail(){
+  if(!selected){dp.innerHTML='';return}
+  const c=comps[selected];const mx=Math.max(...c.mats.map(m=>m.cost));
+  let h=`<div class="detail"><div class="dtitle">${c.name} — scomposizione e contributo variazione 30gg</div>`;
+  h+=`<div style="display:flex;gap:16px;font-size:11px;color:var(--color-text-secondary);margin-bottom:12px;padding-left:128px"><span style="flex:1">Costo €/MW</span><div style="width:160px;display:flex;gap:10px"><span>% costo</span><span>Contr. 30gg</span></div></div>`;
+  c.mats.forEach(m=>{
+    const w=Math.round(m.cost/mx*100);const ct=ctb(m);
+    const cl=ct>0?'up':ct<0?'dn':'flat';const sg=ct>0?'+':'';
+    h+=`<div class="crow"><div class="cname">${m.n}</div><div class="cbarw"><div class="cbar" style="width:${w}%;background:${mc[m.n]}">€${(m.cost/1000).toFixed(0)}k</div></div><div class="cvals"><span class="cv">${m.pct}%</span><span class="cd ${cl}">${sg}${ct}%</span></div></div>`;
+  });
+  const td=[...c.mats].sort((a,b)=>Math.abs(ctb(b))-Math.abs(ctb(a)))[0];
+  const tdc=ctb(td);const dir=tdc>0?'in aumento':'in calo';
+  h+=`<div class="driver-box">Driver principale: <strong>${td.n}</strong> (${td.pct}% del costo) ${dir} del ${Math.abs(td.d30)}% → contribuisce ${tdc>0?'+':''}${tdc}% alla variazione complessiva.</div>`;
+
+  if(selected==='moduli'){
+    h+=`<hr class="transp-sep"><div class="transp-label">Indicatore trasporto</div>`;
+    h+=`<div class="transp-row"><div class="transp-name">Petrolio (Brent)</div><div class="transp-price">$78.5/bbl</div><div class="transp-vals"><span class="cv" style="color:var(--color-text-secondary)">proxy</span><span class="cd up" style="font-weight:500">+4.2%</span></div></div>`;
+  }
+
+  h+=`</div>`;
+  dp.innerHTML=h;
+}
+
+const lgd1=document.getElementById('lgd1');
+Object.entries(comps).forEach(([k,c])=>{lgd1.innerHTML+=`<span><i style="background:${compC[k]}"></i>${c.name}</span>`});
+
+new Chart(document.getElementById('ch1'),{
+  type:'line',data:{labels:ms,datasets:Object.entries(compHist).map(([k,d])=>({
+    label:comps[k].name,data:d,borderColor:compC[k],borderWidth:2,pointRadius:function(ctx){return ctx.dataIndex===d.length-1?4:0},pointBackgroundColor:compC[k],tension:0.3,fill:false
+  }))},options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false,callbacks:{label:ctx=>`${ctx.dataset.label}: €${(ctx.parsed.y/1000).toFixed(0)}k/MW`}}},
+    scales:{x:{grid:{display:false},ticks:{color:tc,font:{size:11}}},
+    y:{title:{display:true,text:'€/MW',color:tc,font:{size:11}},grid:{color:gc},ticks:{color:tc,font:{size:11},callback:v=>'€'+(v/1000).toFixed(0)+'k'}}}}
+});
+
+const kpiG=document.getElementById('kpiGrid');
+let hlCommodity=null;
+
+commodities.forEach(cm=>{
+  if(cm.id==='_sep1'||cm.id==='_sep2'){
+    const sep=document.createElement('div');
+    sep.style.cssText='grid-column:1/-1;border-top:1px dashed var(--color-border-tertiary);margin:4px 0';
+    const lab=document.createElement('div');
+    lab.style.cssText='grid-column:1/-1;font-size:10px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:0.3px;margin-bottom:2px';
+    lab.textContent=cm.id==='_sep1'?'Proxy':'Indicatore trasporto';
+    kpiG.appendChild(sep);
+    kpiG.appendChild(lab);
+    return;
+  }
+  const cls=cm.d30>0?'up':cm.d30<0?'dn':'flat';const sg=cm.d30>0?'+':'';
+  const el=document.createElement('div');el.className='kpi';el.dataset.id=cm.id;
+  let tagHtml=cm.tag?`<span class="kpi-tag">${cm.tag}</span>`:'';
+  el.innerHTML=`<div class="kpi-label">${cm.n}${tagHtml}</div><div class="kpi-val">${cm.price}<small>${cm.unit}</small></div><div class="kpi-d"><span class="${cls}">${sg}${cm.d30}% 30gg</span> · <span style="color:var(--color-text-secondary)">${cm.d7>0?'+':''}${cm.d7}% 7gg</span></div>`;
+  el.addEventListener('click',()=>{hlCommodity=hlCommodity===cm.id?null:cm.id;updKpi();buildCh2()});
+  kpiG.appendChild(el);
+});
+function updKpi(){document.querySelectorAll('.kpi').forEach(k=>k.classList.toggle('hl',k.dataset.id===hlCommodity))}
+
+const commNames={silicio:'Silicio',argento:'Argento',alluminio:'Alluminio',rame:'Rame',acciaio:'Acciaio',vetro:'Vetro solare',polimeri:'Polimeri (EVA)',petrolio:'Petrolio (Brent)'};
+const commColors={silicio:'#00875A',argento:'#185FA5',alluminio:'#BA7517',rame:'#D85A30',acciaio:'#888780',vetro:'#5DCAA5',polimeri:'#7F77DD',petrolio:'#501313'};
+
+const lgd2=document.getElementById('lgd2');
+Object.entries(commNames).forEach(([k,n])=>{lgd2.innerHTML+=`<span><i style="background:${commColors[k]}"></i>${n}</span>`});
+
+let ch2Inst=null;
+function buildCh2(){
+  if(ch2Inst)ch2Inst.destroy();
+  const dsets=Object.entries(commHist).map(([k,d])=>{
+    const isHl=hlCommodity===null||hlCommodity===k;
+    return{label:commNames[k],data:d,borderWidth:isHl?2.5:1,
+      pointRadius:function(ctx){return ctx.dataIndex===d.length-1&&isHl?4:0},
+      pointBackgroundColor:commColors[k],tension:0.3,
+      borderColor:isHl?commColors[k]:(isDk?'rgba(255,255,255,0.12)':'rgba(0,0,0,0.08)')}
+  });
+  ch2Inst=new Chart(document.getElementById('ch2'),{
+    type:'line',data:{labels:ms,datasets:dsets},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false}},
+      scales:{x:{grid:{display:false},ticks:{color:tc,font:{size:11}}},
+      y:{title:{display:true,text:'Indice (base 100 = apr 2025)',color:tc,font:{size:11}},grid:{color:gc},ticks:{color:tc,font:{size:11}}}}}
+  });
+}
+buildCh2();
+
+/* ===== Acquisti moduli Plenitude (dati reali) ===== */
+const poData=[
+ ['JA Solar','Gela (IT)','2023-05-31',194709.83,0.1947],
+ ['JA Solar','Bouillac (FR)','2023-07-20',993224.75,0.1959],
+ ['JA Solar','Tarsia/Melissa/Scalea/Roggiano','2023-06-30',978340.50,0.1928],
+ ['JA Solar','Carmona (ES)','2023-08-22',35537117.04,0.2114],
+ ['JA Solar','Ventas de Huelma (ES)','2023-09-01',31828214.88,0.2114],
+ ['JA Solar','Ravenna','2023-08-01',1241894.34,0.2099],
+ ['JA Solar','Venezia','2023-08-01',783900.94,0.2099],
+ ['JA Solar','Gela (IT)','2024-06-01',906247.80,0.1645],
+ ['JA Solar','Villarino de Los Aires (ES)','2024-04-20',33438346.00,0.1683],
+ ['JA Solar','Fortuna (ES)','2024-06-20',13617331.00,0.1683],
+ ['JA Solar','Priolo Gargallo (IT)','2024-05-01',1181980.80,0.1540],
+ ['LONGI','Ferrandina (Matera)','2024-10-01',1074753.77,0.1126],
+ ['LONGI','Coria del Rio, Sevilla (ES)','2025-01-17',21125749.32,0.1053],
+ ['LONGI','Schio (Vicenza)','2024-10-15',72353.21,0.1209],
+ ['LONGI','Samarate (Varese)','2024-10-15',50427.99,0.1209],
+ ['LONGI','Samarate (Varese)','2024-11-04',80283.65,0.1165],
+ ['LONGI','Aprilia (Latina)','2024-11-04',37996.45,0.1164],
+ ['LONGI','Kozani (GR)','2025-04-03',8857512.59,0.1105],
+ ['LONGI','Moncrivello (Vercelli)','2025-06-16',1069390.08,0.1164],
+ ['LONGI','Sale (Alessandria)','2025-07-07',1215216.00,0.1164],
+ ['LONGI','Cancello e Arnone (Caserta)','2025-06-09',619704.44,0.1169],
+ ['LONGI','Villa Literno (Caserta)','2025-06-16',878690.54,0.1169],
+ ['DMEGC','Assemini (Cagliari)','2025-05-01',1260356.11,0.1244],
+ ['LONGI','Moncrivello (Vercelli)','2026-03-16',853208.16,0.0998],
+ ['LONGI','Vairano Patenora (Caserta)','2026-07-13',1003395.60,0.0999],
+ ['LONGI','Toumpa-Kokkinompara (GR)','2025-06-02',8496200.40,0.105991],
+ ['LONGI','Bioraffineria Gela Eni (CL)','2026-05-01',319538.14,0.0999],
+].map(r=>({sup:r[0],loc:r[1],date:r[2],val:r[3],pw:r[4],t:new Date(r[2]).getTime(),W:r[3]/r[4]}));
+
+const poCol={'JA Solar':'#185FA5','LONGI':'#00875A','DMEGC':'#BA7517'};
+const supActive={'JA Solar':true,'LONGI':true,'DMEGC':true};
+const NOW=new Date('2026-04-14').getTime();
+const BENCH=0.167; // €/W, da benchmark modulo dashboard (€167k/MW)
+const POAVG=(()=>{const v=poData.reduce((s,p)=>s+p.val,0),w=poData.reduce((s,p)=>s+p.W,0);return Math.round(v/w*10000)/10000;})(); // media complessiva fissa su tutti i PO
+
+function poFiltered(){return poData.filter(p=>supActive[p.sup])}
+function fmtEur(n){return '€'+n.toLocaleString('it-IT',{maximumFractionDigits:0})}
+
+// KPI
+const poKpiEl=document.getElementById('poKpi');
+function renderPoKpi(){
+  const d=poFiltered();
+  const totVal=d.reduce((s,p)=>s+p.val,0);
+  const totW=d.reduce((s,p)=>s+p.W,0);
+  const wavg=totW?totVal/totW:0;
+  const sd=[...d].sort((a,b)=>a.t-b.t);
+  const first=sd[0],last=sd[sd.length-1];
+  const varr=first?((last.pw-first.pw)/first.pw*100):0;
+  const k=[
+    ['Prezzo medio ponderato','€'+(wavg*1e6/1000).toFixed(0)+'k/MW',null,'('+wavg.toFixed(3).replace('.',',')+' €/W)'],
+    ['Ultimo acquisto',(last?'€'+(last.pw*1e6/1000).toFixed(0)+'k/MW':'-'),varr<0?'dn':'up',(varr>0?'+':'')+varr.toFixed(0)+'% vs primo'],
+    ['Potenza ordinata',(totW/1e6).toFixed(0)+' MW',null],
+    ['Valore totale',(totVal/1e6).toFixed(1).replace('.',',')+' M€',null],
+    ['N° ordini',d.length+' PO',null]
+  ];
+  poKpiEl.innerHTML=k.map(x=>`<div class="kpi" style="cursor:default"><div class="kpi-label">${x[0]}</div><div class="kpi-val">${x[1]}${x[0]==='Prezzo medio ponderato'?` <small style="color:var(--color-text-secondary)">${x[3]}</small>`:''}</div>${x[2]?`<div class="kpi-d ${x[2]}">${x[3]}</div>`:''}</div>`).join('');
+}
+
+// Filtro fornitori — selezione esclusiva: clicco uno e vedo solo quello
+const poFltrEl=document.getElementById('poFltr');
+function applyFilter(){
+  document.querySelectorAll('.po-chip').forEach(c=>c.classList.toggle('off',!supActive[c.dataset.sup]));
+  renderPoKpi();buildChPo();renderPoTable();
+  if(typeof updPoCount==='function')updPoCount();
+}
+Object.keys(poCol).forEach(s=>{
+  const c=document.createElement('div');c.className='po-chip';c.dataset.sup=s;
+  c.innerHTML=`<i style="background:${poCol[s]}"></i>${s}`;
+  c.addEventListener('click',()=>{
+    const keys=Object.keys(poCol);
+    const onlyThis=supActive[s]&&keys.every(k=>supActive[k]===(k===s));
+    if(onlyThis){keys.forEach(k=>supActive[k]=true);}      // gia isolato -> mostra tutti
+    else{keys.forEach(k=>supActive[k]=(k===s));}            // isola questo
+    applyFilter();
+  });
+  poFltrEl.appendChild(c);
+});
+
+// Grafico 1: andamento prezzo per fornitore (€/W), 3 linee filtrabili
+let chPoInst=null;
+const MESI=['gen','feb','mar','apr','mag','giu','lug','ago','set','ott','nov','dic'];
+function buildChPo(){
+  if(chPoInst)chPoInst.destroy();
+  // asse = TUTTI i mesi continui da min a max (distanze reali, vuoti inclusi)
+  const ks=poData.map(p=>{const x=new Date(p.date);return x.getFullYear()*12+x.getMonth();});
+  const kMin=Math.min(...ks),kMax=Math.max(...ks);
+  const allK=[];for(let k=kMin;k<=kMax;k++)allK.push(k);
+  const labels=allK.map(k=>MESI[k%12]+" '"+String(Math.floor(k/12)).slice(2));
+  const dsets=Object.keys(poCol).filter(s=>supActive[s]).map(s=>{
+    const byM={};
+    poData.filter(p=>p.sup===s).forEach(p=>{const x=new Date(p.date);const k=x.getFullYear()*12+x.getMonth();
+      (byM[k]=byM[k]||{v:0,w:0});byM[k].v+=p.val;byM[k].w+=p.W;});
+    const data=allK.map(k=>k in byM?Math.round(byM[k].v/byM[k].w*1e6):null);
+    return{label:s,data,borderColor:poCol[s],backgroundColor:poCol[s],borderWidth:2,pointRadius:3,pointBackgroundColor:poCol[s],tension:0.3,fill:false,spanGaps:true};
+  });
+  chPoInst=new Chart(document.getElementById('chPo'),{
+    type:'line',data:{labels,datasets:dsets},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false,callbacks:{label:ctx=>
+        ctx.parsed.y===null?null:ctx.dataset.label+': €'+(ctx.parsed.y/1000).toFixed(0)+'k/MW ('+(ctx.parsed.y/1e6).toFixed(3).replace('.',',')+' €/W)'
+      }}},
+      scales:{
+        x:{grid:{display:false},ticks:{color:tc,font:{size:11},maxRotation:45,minRotation:45,autoSkip:false,
+          callback:function(val,i){return i%3===0?this.getLabelForValue(val):'';}}},
+        y:{title:{display:true,text:'€/MW',color:tc,font:{size:11}},grid:{color:gc},ticks:{color:tc,font:{size:11},callback:v=>'€'+(v/1000).toFixed(0)+'k'}}
+      }}
+  });
+}
+
+// Grafico 2: confronto pagato vs stimato moduli, solo periodo con entrambi i dati (apr'25-apr'26), fisso
+const MOD_START=2025*12+3; // apr 2025
+function buildChCmp(){
+  const modByKey={};compHist.moduli.forEach((v,i)=>{modByKey[MOD_START+i]=v;});
+  const modKeys=Object.keys(modByKey).map(Number).sort((a,b)=>a-b);
+  // acquisti su tutti i fornitori, convertiti in €/MW, solo nei mesi del costo moduli
+  const buyByKey={};
+  poData.forEach(p=>{const x=new Date(p.date);const k=x.getFullYear()*12+x.getMonth();
+    if(k>=modKeys[0]&&k<=modKeys[modKeys.length-1]){(buyByKey[k]=buyByKey[k]||{v:0,w:0});buyByKey[k].v+=p.val;buyByKey[k].w+=p.W;}});
+  const labels=modKeys.map(k=>MESI[k%12]+" '"+String(Math.floor(k/12)).slice(2));
+  const mod=modKeys.map(k=>modByKey[k]);
+  const buy=modKeys.map(k=>k in buyByKey?Math.round(buyByKey[k].v/buyByKey[k].w*1e6):null);
+  new Chart(document.getElementById('chCmp'),{
+    type:'line',
+    data:{labels,datasets:[
+      {label:'Prezzo acquisto Plenitude',data:buy,borderColor:'#00875A',backgroundColor:'#00875A22',borderWidth:2.5,pointRadius:3,pointBackgroundColor:'#00875A',tension:0.3,fill:false,spanGaps:true},
+      {label:'Costo materiali stimato (moduli)',data:mod,borderColor:'#185FA5',backgroundColor:'#185FA5',borderWidth:2,pointRadius:3,pointBackgroundColor:'#185FA5',tension:0.3,fill:false,spanGaps:true}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false,callbacks:{label:ctx=>{
+        if(ctx.parsed.y===null)return null;
+        const e='€'+(ctx.parsed.y/1000).toFixed(0)+'k/MW';
+        return ctx.dataset.label==='Costo materiali stimato (moduli)'
+          ?'Costo stimato moduli: '+e
+          :'Prezzo acquisto: '+e+' ('+(ctx.parsed.y/1e6).toFixed(3).replace('.',',')+' €/W)';
+      }}}},
+      scales:{
+        x:{grid:{display:false},ticks:{color:tc,font:{size:11}}},
+        y:{title:{display:true,text:'€/MW',color:tc,font:{size:11}},grid:{color:gc},ticks:{color:tc,font:{size:11},callback:v=>'€'+(v/1000).toFixed(0)+'k'}}
+      }}
+  });
+}
+
+// Tabella ordini
+const poTableEl=document.getElementById('poTable');
+function renderPoTable(){
+  const d=[...poFiltered()].sort((a,b)=>b.t-a.t);
+  let h=`<div class="po-th"><span>Fornitore</span><span>Delivery point</span><span>Data</span><span>Valore PO</span><span style="text-align:right">€/MW</span></div>`;
+  d.forEach(p=>{
+    const fut=p.t>NOW?'<span class="po-fut">▸ futuro</span>':'';
+    const dt=new Date(p.date).toLocaleDateString('it-IT',{month:'2-digit',year:'2-digit'});
+    h+=`<div class="po-tr"><span style="color:${poCol[p.sup]};font-weight:500">${p.sup}</span><span class="po-loc" title="${p.loc}">${p.loc}${fut}</span><span class="po-val">${dt}</span><span class="po-val">${fmtEur(p.val)}</span><span class="po-pr">€${(p.pw*1e6/1000).toFixed(0)}k<br><small style="font-weight:400;color:var(--color-text-tertiary)">${p.pw.toFixed(3).replace('.',',')} €/W</small></span></div>`;
+  });
+  poTableEl.innerHTML=h;
+}
+
+renderPoKpi();buildChPo();buildChCmp();renderPoTable();
+
+// Toggle collassabile tabella ordini
+const poToggle=document.getElementById('poToggle');
+const poTableWrap=document.getElementById('poTable');
+const poArrow=document.getElementById('poArrow');
+function updPoCount(){document.getElementById('poCount').textContent='('+poFiltered().length+' ordini)';}
+updPoCount();
+poToggle.addEventListener('click',()=>{
+  const open=poTableWrap.style.display!=='none';
+  poTableWrap.style.display=open?'none':'';
+  poArrow.style.transform=open?'rotate(0deg)':'rotate(90deg)';
+});
+
+document.getElementById('tabs').addEventListener('click',e=>{
+  const tb=e.target.closest('.tb');if(!tb)return;
+  document.querySelectorAll('.tb').forEach(x=>x.classList.remove('on'));tb.classList.add('on');
+  const t=tb.dataset.t;
+  if(t==='fv'){document.getElementById('fv').style.display='';document.getElementById('other').style.display='none'}
+  else{document.getElementById('fv').style.display='none';document.getElementById('other').style.display='';
+    document.getElementById('phMsg').textContent=`Filiera ${t==='eol'?'Eolico':'Batterie'} — dati in fase di sviluppo.`}
+});
+</script>
+</body>
+</html>
